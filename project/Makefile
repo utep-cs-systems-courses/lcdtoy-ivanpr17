@@ -15,7 +15,7 @@ lcdToy.elf: ${COMMON_OBJECTS} main.o p1_interrupt_handler.o switches.o led.o buz
 	${CC} ${CFLAGS} $(LDFLAGS) -o $@ $^ -lTimer -lLcd -lShape -lCircle -lp2sw
 
 load: lcdToy.elf
-	msp430loader.sh blinkyBuzzy.elf
+	msp430loader.sh lcdToy.elf
 tidy:
 	rm -f *.o *.elf *~
 clean:
