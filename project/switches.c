@@ -1,6 +1,8 @@
 #include <msp430.h>
 #include "switches.h"
 #include "buzzer.h"
+#include "shapemotion.h"
+
 #include <libTimer.h>
 
 // To avoid implicit declaration warning
@@ -74,7 +76,7 @@ void switch_state_machine(int state){
     break;
   case 02:// Shines LEDs
     switch_state_changed = 1;
-    
+    movScreen();
     
     break;
   case 03://Plays Zelda Item tune and shines LEDs

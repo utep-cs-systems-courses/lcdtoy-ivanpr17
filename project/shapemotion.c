@@ -10,12 +10,13 @@
 #include <libTimer.h>
 #include <lcdutils.h>
 #include <lcddraw.h>
-#include "p2switches.h"
 #include <shape.h>
 #include <abCircle.h>
 #include "buzzer.h"
-#include "led.h"
 #include "switches.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include "shapemotion.h"
 
 #define GREEN_LED BIT6
 
@@ -82,7 +83,7 @@ typedef struct MovLayer_s {
 
 /* initial value of {0,0} will be overwritten */
 MovLayer ml3 = { &layer3, {1,1}, 0 }; /**< not all layers move */
-MovLayer ml1 = { &layer1, {1,2}, &ml3 }; 
+MovLayer ml1= { &layer1, {1,2}, &ml3 }; 
 MovLayer ml0 = { &layer0, {2,1}, &ml1 }; 
 
 void movLayerDraw(MovLayer *movLayers, Layer *layers)
@@ -160,44 +161,25 @@ Region fieldFence;		/**< fence around playing field  */
 /** Initializes everything, enables interrupts and green LED, 
  *  and handles the rendering for the screen
  */
-void main()
+void setScreen()
 {
-  P1DIR |= GREEN_LED;		/**< Green led on when CPU on */		
-  P1OUT |= GREEN_LED;
-
-  configureClocks();
-  lcd_init();
+  //P1DIR |= GREEN_LED;
+  //P1OUT |= GREEN_LED;
+  //lcd_init();
   shapeInit();
-  switch_init();
-  p2sw_init(1);
-
-  shapeInit();
-
-  //
-  //switch_init();
-  led_init();
-  //
-
   layerInit(&layer0);
   layerDraw(&layer0);
-
-
   layerGetBounds(&fieldLayer, &fieldFence);
+}
+void movScreen(){
+  //P1OUT &= ~GREEN_LED;    /**< Green led off witHo CPU */
+  //or_sr(0x10);	      /**< CPU OFF */
 
-
-  enableWDTInterrupts();      /**< enable periodic interrupt */
-  or_sr(0x8);	              /**< GIE (enable interrupts) */
-
-
-  for(;;) { 
-    while (!redrawScreen) { /**< Pause CPU if screen doesn't need updating */
-      P1OUT &= ~GREEN_LED;    /**< Green led off witHo CPU */
-      or_sr(0x10);	      /**< CPU OFF */
-    }
-    P1OUT |= GREEN_LED;       /**< Green led on when CPU on */
-    redrawScreen = 0;
-    movLayerDraw(&ml0, &layer0);
-  }
+  //P1OUT |= GREEN_LED;       /**< Green led on when CPU on */
+  redrawScreen = 0;
+  movLayerDraw(&ml0, &layer0);
+  mlAdvance(&ml0, &fieldFence);
+  redrawScreen = 1;
 }
 
 /** Watchdog timer interrupt handler. 15 interrupts/sec */
