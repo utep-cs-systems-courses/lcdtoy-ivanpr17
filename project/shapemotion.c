@@ -10,9 +10,12 @@
 #include <libTimer.h>
 #include <lcdutils.h>
 #include <lcddraw.h>
-#include <p2switches.h>
+#include "p2switches.h"
 #include <shape.h>
 #include <abCircle.h>
+#include "buzzer.h"
+#include "led.h"
+#include "switches.h"
 
 #define GREEN_LED BIT6
 
@@ -165,9 +168,15 @@ void main()
   configureClocks();
   lcd_init();
   shapeInit();
+  switch_init();
   p2sw_init(1);
 
   shapeInit();
+
+  //
+  //switch_init();
+  led_init();
+  //
 
   layerInit(&layer0);
   layerDraw(&layer0);

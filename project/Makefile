@@ -11,8 +11,8 @@ AS              = msp430-elf-gcc -mmcu={CPU} -c
 all: lcdToy.elf 
 
 #additional rules for files
-lcdToy.elf: ${COMMON_OBJECTS} main.o p1_interrupt_handler.o switches.o led.o buzzer.o
-	${CC} ${CFLAGS} $(LDFLAGS) -o $@ $^ -lTimer -lLcd -lShape -lCircle -lp2sw
+lcdToy.elf: ${COMMON_OBJECTS} main.o p1_interrupt_handler.o switches.o buzzer.o
+	${CC} ${CFLAGS} $(LDFLAGS) -o $@ $^ -lTimer -lLcd -lShape -lCircle
 
 load: lcdToy.elf
 	msp430loader.sh lcdToy.elf
