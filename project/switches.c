@@ -69,19 +69,20 @@ void switch_interrupt_handler(){
 void switch_state_machine(int state){
   //if switch is pressed, below code determines proper case
   switch(state){
-  case 01:// Plays part of Zelda Theme and shines LEDs
+  case 01:// Plays part of Zelda Theme
     switch_state_changed = 1;
     ZeldaTheme();
     
     break;
-  case 02:// Shines LEDs
+  case 02:// moves shapes on lcd screen
     switch_state_changed = 1;
     movScreen();
     
     break;
-  case 03://Plays Zelda Item tune and shines LEDs
+  case 03://draws string on lcd
     switch_state_changed = 1;
-    ZeldaItem();
+    drawStringMotion();
+    uniqueShape();
 
     break;
   case 04://Plays Zelda Item tune

@@ -51,7 +51,7 @@ Layer fieldLayer = {		/* playing field as a layer */
   (AbShape *) &fieldOutline,
   {screenWidth/2, screenHeight/2},/**< center */
   {0,0}, {0,0},				    /* last & next pos */
-  COLOR_BLACK,
+  COLOR_WHITE,
   &layer3
 };
 
@@ -70,6 +70,29 @@ Layer layer0 = {		/**< Layer with an orange circle */
   COLOR_ORANGE,
   &layer1,
 };
+
+void uniqueShape(){
+  int count = 0;
+  int increasing = 1;
+  for(int i =0; i<25; i++){
+    if(i<10 || i>15){
+      for(int j=0; j<6; j++){
+	drawPixel((screenWidth/2)+i,(screenHeight/2)+j, COLOR_BLUE);
+      }
+    }else{
+      for(int k=0; k<51+count; k++){
+	drawPixel((screenWidth/2)+i,((screenHeight/2)-30)+k, COLOR_BLUE);
+	if(count = 4){
+	  increasing = 0;
+	}else if(increasing){
+	  count ++;
+	}else{
+	  count--;
+	}
+      }
+    }	  
+  }
+}
 
 /** Moving Layer
  *  Linked list of layer references
@@ -152,7 +175,7 @@ void mlAdvance(MovLayer *ml, Region *fence)
 }
 
 
-u_int bgColor = COLOR_BLUE;     /**< The background color */
+u_int bgColor = COLOR_BLACK;     /**< The background color */
 int redrawScreen = 1;           /**< Boolean for whether screen needs to be redrawn */
 
 Region fieldFence;		/**< fence around playing field  */
@@ -170,6 +193,7 @@ void setScreen()
   layerInit(&layer0);
   layerDraw(&layer0);
   layerGetBounds(&fieldLayer, &fieldFence);
+  uniqueShape();
 }
 void movScreen(){
   //P1OUT &= ~GREEN_LED;    /**< Green led off witHo CPU */
@@ -180,6 +204,10 @@ void movScreen(){
   movLayerDraw(&ml0, &layer0);
   mlAdvance(&ml0, &fieldFence);
   redrawScreen = 1;
+}
+
+void drawStringMotion(){
+  drawString5x7(0,0, "Lab 3" , COLOR_WHITE, COLOR_BLACK);
 }
 
 /** Watchdog timer interrupt handler. 15 interrupts/sec */
